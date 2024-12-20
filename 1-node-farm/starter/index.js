@@ -1,4 +1,4 @@
-// const fs = require("fs");
+const fs = require("fs");
 const http = require("http");
 
 // FILES ////////////////////////////////////////////////////////////////
@@ -36,9 +36,39 @@ const http = require("http");
 
 // SERVER ////////////////////////////////////////////////////////////////
 
+// Called only once even if route refreshed
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8"); // __dirname === './'
+
 const server = http.createServer((req, res) => {
-  console.log("req", req.headers);
-  res.end("Hello from the server");
+  console.log("req", req.url);
+
+  const pathName = req.url;
+
+  if (pathName === "/" || pathName === "/overview") {
+    res.end("Response from overview");
+  } else if (pathName === "/product") {
+    res.end("Response from product");
+  } else if (pathName === "/api") {
+    // fs.readFile(`${__dirname}/dev-data/data.json`, "utf-8", (err, data) => {
+    //   const productData = JSON.parse(data);
+    //   console.log("productData", productData);
+    //   res.writeHead(200, {
+    //     "content-type": "application/json",
+    //   });
+    //   res.end(data);
+    // });
+
+    res.writeHead(200, {
+      "content-type": "application/json",
+    });
+    res.end(data);
+  } else {
+    res.writeHead(404, {
+      "Content-type": "text/html",
+      "my-own-header": "hello from own header",
+    });
+    res.end("<h1>Page Not Found</h1>");
+  }
 });
 
 server.listen(8000, () => {
