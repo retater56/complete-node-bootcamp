@@ -23,7 +23,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ====================================== Routes
+// ====================================== Tours Routes
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
@@ -162,6 +162,43 @@ const deleteTour = (req, res) => {
   );
 };
 
+// ====================================== Tours Routes
+
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'The route is not defined',
+  });
+};
+
+const getUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'The route is not defined',
+  });
+};
+
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'The route is not defined',
+  });
+};
+
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'The route is not defined',
+  });
+};
+
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'The route is not defined',
+  });
+};
+
 // ====================================== Route handlers
 
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
@@ -171,6 +208,14 @@ app
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour);
+
+app.route('/api/v1/users').get(getAllUsers).post(createUser);
+
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 const PORT = 3000;
 app.listen(PORT, () => {
