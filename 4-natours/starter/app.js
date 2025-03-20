@@ -1,14 +1,18 @@
 const express = require('express');
 const fs = require('fs');
+const morgan = require('morgan');
 
 const app = express();
 
-app.use(express.json()); // Middleware
+// ====================================== Middlewares
+app.use(morgan('dev'));
+
+app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log('=========================================');
-  console.log('Hello from Middleware');
-  console.log('=========================================');
+  // console.log('=========================================');
+  // console.log('Hello from Middleware');
+  // console.log('=========================================');
 
   next();
 }); // Middleware, should be defined before app.route to be called by route middleware
@@ -19,18 +23,20 @@ app.use((req, res, next) => {
   next();
 });
 
+// ====================================== Routes
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
 const getAllTours = (req, res) => {
-  console.log('=========================================');
-  console.log('req time', req.requestTime);
-  console.log('=========================================');
+  // console.log('=========================================');
+  // console.log('req time', req.requestTime);
+  // console.log('=========================================');
 
   res.status(200).json({
     status: 'success',
-    requestTime: req.requestTime,
+    // requestTime: req.requestTime,
     results: tours.length,
     data: {
       tours,
@@ -155,6 +161,8 @@ const deleteTour = (req, res) => {
     }
   );
 };
+
+// ====================================== Route handlers
 
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
 
