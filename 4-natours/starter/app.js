@@ -5,13 +5,32 @@ const app = express();
 
 app.use(express.json()); // Middleware
 
+app.use((req, res, next) => {
+  console.log('=========================================');
+  console.log('Hello from Middleware');
+  console.log('=========================================');
+
+  next();
+}); // Middleware, should be defined before app.route to be called by route middleware
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+
+  next();
+});
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
 const getAllTours = (req, res) => {
+  console.log('=========================================');
+  console.log('req time', req.requestTime);
+  console.log('=========================================');
+
   res.status(200).json({
     status: 'success',
+    requestTime: req.requestTime,
     results: tours.length,
     data: {
       tours,
@@ -137,10 +156,10 @@ const deleteTour = (req, res) => {
   );
 };
 
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
+
 app
   .route('/api/v1/tours/:id')
-  .get(getAllTours)
-  .post(createTour)
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour);
