@@ -11,6 +11,8 @@ app.use(morgan('dev'));
 
 app.use(express.json());
 
+app.use(express.static(`${__dirname}/public`)); // http://localhost:3000/overview.html
+
 app.use((req, res, next) => {
   // console.log('=========================================');
   // console.log('Hello from Middleware');
